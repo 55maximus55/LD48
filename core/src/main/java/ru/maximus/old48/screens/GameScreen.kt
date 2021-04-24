@@ -16,7 +16,7 @@ class GameScreen(val context: Context) : KtxScreen {
     val cellWidth = 30f
     val cellPerspective = 3.6f
     val cellHeight = 30f
-    val speed = 60f
+    var speed = 3f
 
     var initX = ((320f / cellWidth).toInt() + 1) - 1
 
@@ -30,18 +30,24 @@ class GameScreen(val context: Context) : KtxScreen {
         verticalTimer.clear()
         angles.clear()
         initX = -((320f / cellWidth).toInt() + 1)
+        horTimer = 0f
     }
 
     val skyTimer = Timer(start = 0.3f, end = 0.7f)
     val verticalTimer = Timer(start = 0.8f, end = 1.3f)
     val angles = ArrayList<Float>()
 
+    var horTimer = 0f
+    val horStart = 1.4f
+
     override fun render(delta: Float) {
         skyTimer.update(delta)
         verticalTimer.update(delta)
 
+        horTimer += delta
 
         shapeRenderer.apply {
+            /* Grid render */
             use(ShapeRenderer.ShapeType.Line) {
                 rectLine(
                     320f - skyTimer.value() * 320f, skyHeight,
@@ -63,8 +69,14 @@ class GameScreen(val context: Context) : KtxScreen {
                     )
                 }
                 /* Horizontal lines */
-                for (y in 0 until (skyHeight / cellHeight).toInt() + 1) {
-                    line(0f, skyHeight - cellHeight * y, 640f, skyHeight - cellHeight * y)
+                if (horTimer > horStart) {
+                    var height = skyHeight * (1f - (horTimer - horStart) / speed)
+                    var y = 0
+                    while (skyHeight > height + y * cellHeight) {
+                        line(0f, height + cellHeight * y, 640f, height + cellHeight * y)
+                        y++
+                    }
+                    if (height < 0f) height += cellHeight
                 }
 
                 /* Angles */
@@ -120,17 +132,9 @@ class GameScreen(val context: Context) : KtxScreen {
                     }
                 }
 
-
                 color = Color.PURPLE
             }
         }
-    }
-
-    fun getScreenVec(x: Float, y: Float): Vector2 {
-        return Vector2(
-            320f,
-            357.77f
-        )
     }
 
 }
