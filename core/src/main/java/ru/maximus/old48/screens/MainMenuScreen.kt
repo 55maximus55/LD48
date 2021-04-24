@@ -16,6 +16,7 @@ import ru.maximus.old48.setScreen
 
 class MainMenuScreen(val context: Context): KtxScreen {
 
+    val projectName = "CyberAssHacker"
     // System label
     val systemLabelText = "${
         when {
@@ -39,7 +40,7 @@ class MainMenuScreen(val context: Context): KtxScreen {
             "\n" +
             "\n" +
             "READY.\n" +
-            "LOAD \"Project D\"\n" +
+            "LOAD \"$projectName\"\n" +
             "\n" +
             "PRESS PLAY ON TAPE\n" +
             "LOADING...\n" +
@@ -138,7 +139,7 @@ class MainMenuScreen(val context: Context): KtxScreen {
                 setPosition(650f, 140f)
 
                 table {
-                    label("Game:\n  Project D")
+                    label("Game:\n  $projectName")
                     row()
                     label("Made by team:\n  Shrek is love\n  Shrek is live")
                     row()
