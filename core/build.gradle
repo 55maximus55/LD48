@@ -29,4 +29,7 @@ dependencies {
 	api "com.badlogicgames.ashley:ashley:$ashleyVersion"
 	api "io.github.libktx:ktx-ashley:$ktxAshleyVersion"
 	api "io.github.libktx:ktx-math:$ktxMathVersion"
+
+	implementation 'com.crashinvaders.vfx:gdx-vfx-core:0.5.0'
+	implementation 'com.crashinvaders.vfx:gdx-vfx-effects:0.5.0'    // Optional, if you need standard filter/effects.
 }

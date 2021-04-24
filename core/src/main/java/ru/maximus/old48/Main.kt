@@ -4,10 +4,20 @@ import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.Screen
+import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.graphics.Pixmap
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.crashinvaders.vfx.VfxManager
+import com.crashinvaders.vfx.effects.FilmGrainEffect
+import com.crashinvaders.vfx.effects.FisheyeEffect
+import com.crashinvaders.vfx.effects.OldTvEffect
+import com.crashinvaders.vfx.effects.VfxEffect
 import ktx.app.KtxGame
+import ktx.app.clearScreen
+import ktx.assets.load
 import ktx.assets.toInternalFile
 import ktx.assets.toLocalFile
 import ktx.graphics.takeScreenshot
@@ -20,6 +30,7 @@ import java.time.LocalDateTime
 
 /** [com.badlogic.gdx.ApplicationListener] implementation shared by all platforms.  */
 class Main : KtxGame<Screen>() {
+
     val context = Context()
 
     override fun create() {
@@ -27,6 +38,13 @@ class Main : KtxGame<Screen>() {
             bindSingleton(this@Main)
             bindSingleton(SpriteBatch())
             bindSingleton(ShapeRenderer())
+            bindSingleton(AssetManager().apply {
+                load<Texture>("player.png")
+                finishLoading()
+            })
+            bindSingleton(VfxManager(Pixmap.Format.RGBA8888).apply {
+                addEffect(OldTvEffect())
+            })
         }
         Scene2DSkin.defaultSkin = Skin("skins/commodore64/uiskin.json".toInternalFile())
 
@@ -43,10 +61,18 @@ class Main : KtxGame<Screen>() {
     }
 
     override fun render() {
-        super.render()
+        val vfx: VfxManager = context.inject()
+        clearScreen(0f, 0f, 0f, 1f)
+        vfx.cleanUpBuffers()
+        vfx.beginInputCapture()
+        currentScreen.render(Gdx.graphics.deltaTime)
+        vfx.endInputCapture()
+        vfx.applyEffects()
+        vfx.renderToScreen()
+
         // TODO: set to Main Menu
         if (Gdx.input.isKeyJustPressed(Input.Keys.F2))
-            setScreen<GameScreen>(context)
+            setScreen<MainMenuScreen>(context)
         if (Gdx.input.isKeyJustPressed(Input.Keys.F12))
             takeScreenshot("screenshots/${LocalDateTime.now().second}-${LocalDateTime.now().minute}-${LocalDateTime.now().hour}-${LocalDateTime.now().dayOfMonth}-${LocalDateTime.now().monthValue}-${LocalDateTime.now().year}.png".toLocalFile())
     }
