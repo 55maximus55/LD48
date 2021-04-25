@@ -15,9 +15,9 @@ import ktx.inject.Context
 import ktx.scene2d.*
 import ru.maximus.old48.setScreen
 
-class MainMenuScreen(val context: Context): KtxScreen {
+class GameOverScreen(val context: Context) : KtxScreen {
 
-    val projectName = "Cyber Ass Hacker"
+    val projectName = "CyberAssHacker"
     // System label
     val systemLabelText = "${
         when {
@@ -46,23 +46,15 @@ class MainMenuScreen(val context: Context): KtxScreen {
             "PRESS PLAY ON TAPE\n" +
             "LOADING...\n" +
             "READY.\n" +
-            "RUN"
+            "RUN\n" +
+            "\n" +
+            "GAME OVER!\n" +
+            "You need to go deeper!\n" +
+            "\n" +
+            "PRESS SPACE TO CONTINUE"
     val runLabelDuration = 0.2f
     var runLabelTimer = 0f
     val runLabel: Label
-
-    // Info window
-    var infoWindowTimer = 0f
-    val infoWindowDuration = 0.7f
-    val infoWindow: Window
-    // Leaderboard window
-    var leaderWindowTimer = 0f
-    val leaderWindowDuration = 0.8f
-    val leaderWindow: Window
-    // Start window
-    var startWindowTimer = 0f
-    val startWindowDuration = 0.9f
-    val startWindow: Window
 
     val batch: SpriteBatch = context.inject()
     val stage = stage(batch, ScreenViewport()).apply {
@@ -88,71 +80,6 @@ class MainMenuScreen(val context: Context): KtxScreen {
 
                 runLabel = label("")
             }
-
-            startWindow = window("") {
-                setSize(300f, 192f)
-                setPosition(250f, 50f)
-
-                label("**** NEW GAME ****")
-                row()
-                label("")
-                row()
-                table {
-                    button("sound")
-                    slider().apply {
-                        value = 1f
-                    }
-                    row()
-                    button("music")
-                    slider().apply {
-                        value = 1f
-                    }
-                }
-                row()
-                label("PRESS SPACE", style = "optional")
-                row()
-                textButton("START").apply {
-                    onChange {
-                        setScreen<GameScreen>(context)
-                    }
-                }
-            }
-            leaderWindow = window("", "dialog") {
-                titleTable.apply {
-                    reset()
-                    add(label("LEADERBOARD", "title"))
-                }
-                setSize(250f, 215f)
-                setPosition(350f, 250f)
-
-                table {
-                    for (i in 1..10) {
-                        label("$i. ")
-                        label("Player")
-                        row()
-                    }
-                }
-            }
-            infoWindow = window("", "dialog") {
-                titleTable.apply {
-                    reset()
-                    add(label("INDORMATION", "title"))
-                }
-                setSize(350f, 215f)
-                setPosition(650f, 140f)
-
-                table {
-                    label("Game:\n  $projectName")
-                    row()
-                    label("Made by team:\n  Shrek is love\n  Shrek is live")
-                    row()
-                    textButton("55_maximus_55").apply {
-                        onChange {
-                            Gdx.net.openURI("http://vk.com/55maximus55")
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -160,9 +87,6 @@ class MainMenuScreen(val context: Context): KtxScreen {
         systemLabel.setText("**** ${systemLabelText.subSequence(0, ((systemLabelTimer / systemLabelDuration) * systemLabelText.length).toInt())} ****")
         memoryLabel.setText("${memoryLabelText.subSequence(0, ((memoryLabelTimer / memoryLabelDuration) * memoryLabelText.length).toInt())}")
         runLabel.setText("${runLabelText.subSequence(0, ((runLabelTimer / runLabelDuration) * runLabelText.length).toInt())}")
-        if (!leaderWindow.isVisible && leaderWindowTimer > leaderWindowDuration) leaderWindow.isVisible = true
-        if (!startWindow.isVisible && startWindowTimer > startWindowDuration) startWindow.isVisible = true
-        if (!infoWindow.isVisible && infoWindowTimer > infoWindowDuration) infoWindow.isVisible = true
 
         stage.apply {
             act()
@@ -182,12 +106,8 @@ class MainMenuScreen(val context: Context): KtxScreen {
             }
         }
 
-        infoWindowTimer += delta
-        leaderWindowTimer += delta
-        startWindowTimer += delta
-
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
-            setScreen<GameScreen>(context)
+            setScreen<MainMenuScreen>(context)
     }
 
     override fun resize(width: Int, height: Int) {
@@ -200,15 +120,9 @@ class MainMenuScreen(val context: Context): KtxScreen {
         systemLabelTimer = 0f
         memoryLabelTimer = 0f
         runLabelTimer = 0f
-
-        leaderWindowTimer = 0f
-        leaderWindow.isVisible = false
-        startWindowTimer = 0f
-        startWindow.isVisible = false
-        infoWindowTimer = 0f
-        infoWindow.isVisible = false
     }
     override fun hide() {
         Gdx.input.inputProcessor = null
     }
+
 }

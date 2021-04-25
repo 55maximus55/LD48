@@ -19,10 +19,10 @@ public class Lwjgl3Launcher {
 		Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
 		configuration.setTitle("LD48");
 		configuration.setWindowedMode(640, 480);
-//		for (Graphics.DisplayMode displayMode: Lwjgl3ApplicationConfiguration.getDisplayModes()) {
-//			if (displayMode.width == 640 && displayMode.height == 480 && displayMode.refreshRate == 60)
-//				configuration.setFullscreenMode(displayMode);
-//		}
+		for (Graphics.DisplayMode displayMode: Lwjgl3ApplicationConfiguration.getDisplayModes()) {
+			if (displayMode.width == 640 && displayMode.height == 480 && displayMode.refreshRate == 60)
+				configuration.setFullscreenMode(displayMode);
+		}
 		configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
 		return configuration;
 	}

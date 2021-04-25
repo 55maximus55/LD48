@@ -24,6 +24,7 @@ import ktx.graphics.takeScreenshot
 import ktx.inject.Context
 import ktx.inject.register
 import ktx.scene2d.Scene2DSkin
+import ru.maximus.old48.screens.GameOverScreen
 import ru.maximus.old48.screens.GameScreen
 import ru.maximus.old48.screens.MainMenuScreen
 import java.time.LocalDateTime
@@ -51,13 +52,15 @@ class Main : KtxGame<Screen>() {
         context.register {
             bindSingleton(MainMenuScreen(context))
             bindSingleton(GameScreen(context))
+            bindSingleton(GameOverScreen(context))
         }
         addScreen(context.inject<MainMenuScreen>())
         addScreen(context.inject<GameScreen>())
+        addScreen(context.inject<GameOverScreen>())
 
         // TODO: set to Main Menu
         setScreen<MainMenuScreen>()
-        setScreen<GameScreen>()
+//        setScreen<GameScreen>()
     }
 
     override fun render() {
