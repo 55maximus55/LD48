@@ -236,8 +236,8 @@ class GameScreen(val context: Context) : KtxScreen {
             }
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT) && playerDir > -4) playerDir--
-        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) && playerDir < 4) playerDir++
+        if ((Gdx.input.isKeyJustPressed(Input.Keys.LEFT) || (Gdx.input.isKeyJustPressed(Input.Keys.A))) && playerDir > -4) playerDir--
+        if ((Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) || (Gdx.input.isKeyJustPressed(Input.Keys.D))) && playerDir < 4) playerDir++
         playerPosX += playerDir * delta * 150f
 
         updateTrack(delta)
