@@ -238,6 +238,25 @@ class GameScreen(val context: Context) : KtxScreen {
 
         if ((Gdx.input.isKeyJustPressed(Input.Keys.LEFT) || (Gdx.input.isKeyJustPressed(Input.Keys.A))) && playerDir > -4) playerDir--
         if ((Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) || (Gdx.input.isKeyJustPressed(Input.Keys.D))) && playerDir < 4) playerDir++
+
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
+            controlTimer.update(delta)
+            if (controlTimer.value() == 1f) {
+                controlTimer.clear()
+                playerDir--
+            }
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
+            controlTimer.update(delta)
+            if (controlTimer.value() == 1f) {
+                controlTimer.clear()
+                playerDir++
+            }
+        } else {
+            controlTimer.clear()
+        }
+        if (playerDir < -4) playerDir = -4
+        if (playerDir > 4) playerDir = 4
+
         playerPosX += playerDir * delta * 150f
 
         updateTrack(delta)
@@ -247,6 +266,8 @@ class GameScreen(val context: Context) : KtxScreen {
                 gameOver()
         }
     }
+
+    val controlTimer = Timer(start = 0.0f, end = 0.1f)
 
     fun gameOver() {
 //        println("SUKA BLYAT")
